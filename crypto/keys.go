@@ -21,11 +21,34 @@ type PrivateKey struct {
 	key ed25519.PrivateKey
 }
 
+// NewPrivateKeyFromString: convert string into slice of bytes
+func NewPrivateKeyFromString(s string) *PrivateKey {
+	// this conver strings into slice of bytes
+	b, err := hex.DecodeString(s)
+	if err != nil {
+		panic(err)
+	}
+
+	return NewPrivateKeyFromSeed(b)
+}
+
+// NewPrivateKeyFromSeed: generate new private key from supplied seed
+func NewPrivateKeyFromSeed(seed []byte) *PrivateKey {
+	if len(seed) != seedLen {
+		panic("invalid seed length, must be 32")
+	}
+
+	return &PrivateKey{
+		key: ed25519.NewKeyFromSeed(seed),
+	}
+}
+
 // Bytes returns the private key
 func (p *PrivateKey) Bytes() []byte {
 	return p.key
 }
 
+// GeneratePrivateKey: generates private key
 func GeneratePrivateKey() *PrivateKey {
 	//make a slice of byte of seedlen
 	seed := make([]byte, seedLen)
