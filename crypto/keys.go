@@ -41,12 +41,14 @@ func GeneratePrivateKey() *PrivateKey {
 }
 
 // Sign is used to sign message in this case transactions
-func (p *PrivateKey) Sign(msg []byte) []byte {
-	return ed25519.Sign(p.key, msg)
+func (p *PrivateKey) Sign(msg []byte) *Signature {
+	return &Signature{
+		value: ed25519.Sign(p.key, msg),
+	}
 }
 
-// Public is a function that returns the public key - generated from private key
-func (p *PublicKey) Public() *PublicKey {
+// Public is a function that creates the public key - generated from private key
+func (p *PrivateKey) Public() *PublicKey {
 	//make a slice of length 32 bytes
 	b := make([]byte, 32)
 	//copy into b the last 32 byte that represents the public key
@@ -60,4 +62,23 @@ func (p *PublicKey) Public() *PublicKey {
 // delcare a truct of public key
 type PublicKey struct {
 	key ed25519.PublicKey
+}
+
+// Byte return the public key
+func (p *PublicKey) Byte() []byte {
+	return p.key
+}
+
+type Signature struct {
+	value []byte
+}
+
+// Bytes returns the signed message or transaction
+func (s *Signature) Bytes() []byte {
+	return s.value
+}
+
+// Verify verifies the signed message or transaction
+func (s *Signature) Verify(pubKey *PublicKey, msg []byte) bool {
+	return ed25519.Verify(pubKey.key, msg, s.value)
 }
