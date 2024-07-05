@@ -3,9 +3,18 @@ package types
 import (
 	"crypto/sha256"
 
+	"github.com/obynonwane/blocker/crypto"
 	"github.com/obynonwane/blocker/proto"
 	pb "google.golang.org/protobuf/proto"
 )
+
+/*
+* SignBlock: signs the hash of the block commited by the validator
+* using the account private key (pk)
+ */
+func SignBlock(pk *crypto.PrivateKey, b *proto.Block) *crypto.Signature {
+	return pk.Sign(HashBlock(b))
+}
 
 /*
 * HashBlock: returns SHA254 of the Header

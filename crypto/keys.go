@@ -109,8 +109,9 @@ func (s *Signature) Bytes() []byte {
 	return s.value
 }
 
-// Verify verifies the signed message or transaction
+// Verify verifies the  message or transaction (msg or transaction are hashes)
 func (s *Signature) Verify(pubKey *PublicKey, msg []byte) bool {
+	// pubkey, transactionhash & signature
 	return ed25519.Verify(pubKey.key, msg, s.value)
 }
 
