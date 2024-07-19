@@ -16,6 +16,15 @@ message Header {
 
 }
 
+message txInput{
+    // The previous hash of the transaction containing the output we want to spend
+    bytes PrevTxHash = 1;
+    // the index of the output of the previous transaction we want to spend
+    uint32 PrevOutIndex = 2;
+    bytes publicKey = 3;
+    bytes signature =4;
+}
+
 message Transaction {
 
 }
